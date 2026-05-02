@@ -18,7 +18,7 @@ def get_db():
 
 @router.post("/find")
 def matchmake(db: Session = Depends(get_db)):
-    match = find_match()
+    match = find_match(db)
 
     if not match:
         return {"message": "No match found"}

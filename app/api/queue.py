@@ -28,4 +28,4 @@ def join(player_id: int, db: Session = Depends(get_db)):
 
 @router.get("/")
 def show_queue():
-    return [{"player_id": q["player"].id} for q in get_queue()]
+    return [{"player_id": q["player_id"]} for q in get_queue()]

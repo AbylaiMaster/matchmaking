@@ -1,26 +1,14 @@
 from app.services.queue_manager import queue
-import time
+from app.db import models
 
-def find_match():
+def find_match(db):
     if len(queue) < 2:
         return None
 
-    for i in range(len(queue)):
-        for j in range(i + 1, len(queue)):
-            p1 = queue[i]
-            p2 = queue[j]
+    q1 = queue.pop(0)
+    q2 = queue.pop(0)
 
-            diff = abs(p1["player"].rating - p2["player"].rating)
-            wait_time = time.time() - min(p1["joined_at"], p2["joined_at"])
+    p1 = db.query(models.Player).get(q1["player_id"])
+    p2 = db.query(models.Player).get(q2["player_id"])
 
-            max_diff = 50 + wait_time * 2
-
-            if diff <= max_diff:
-                match = (p1["player"], p2["player"])
-
-                queue.remove(p1)
-                queue.remove(p2)
-
-                return match
-
-    return None
+    return p1, p2
